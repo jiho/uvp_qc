@@ -7,48 +7,35 @@
 #
 # (c) 2020 Jean-Olivier Irisson, GNU General Public License v3
 
-source("read_data.R")
-source("lib_plot.R")
-
 # remotes::install_github("jiho/castr")
 library("castr")
 
 #' Detect outliers based on a moving quantile
 #'
-#' @param k1 order of the moving window for the quantile anomaly
-#' @param k2 order of the moving window for the deviation from quantile
-#' @param tau quantile
-#' @param mult multiplier of the anomaly to the quantile beyond which points are considered as outliers
-#' @param n.max maximum number of iterations
-hampel_q <- function(x, k1=1, k2=5, tau=0.75, mult=5.3, n.max=10) {
-  k1 <- round(k1)
-  k2 <- round(k2)
-  # initiate empty outliers
-  outliers <- rep(FALSE, times=length(x))
+#' @param k_tau order of the moving window for the quantile anomaly
+#' @param tau target quantile
+#' @param k_anom order of the moving window for the deviation from quantile
+#' @param anom_mult multiplier of the anomaly to the quantile beyond which points are considered as outliers
+#' @param n_max maximum number of iterations
+hampel_q <- function(x, k_tau=1, tau=0.75, k_anom=5, anom_mult=5.3, n_max=10) {
+  k_tau <- round(k_tau)
+  k_anom <- round(k_anom)
 
-  for (i in 1:n.max) {
-    mv_q <- slide(x, k=k1, stats::quantile, p=tau, na.rm=TRUE, n=1)
-    anom <- abs(x - mv_q)
-    mv_mad <- slide(anom, k=k2, stats::median, na.rm=TRUE)
-    out <- (anom > mv_mad * mult)
-    if (!any(out, na.rm = TRUE)) {
-      break
-    }
+  # initiate empty outliers
+  outliers <- out <- rep(FALSE, times=length(x))
+
+  for (i in 1:n_max) {
     # remove outliers
     outliers <- outliers | out
     x[outliers] <- NA
     # and iterate
+    mv_q <- slide(x, k=k_tau, stats::quantile, p=tau, na.rm=TRUE, n=1)
+    anom <- abs(x - mv_q)
+    mv_mad <- slide(anom, k=k_anom, stats::median, na.rm=TRUE)
+    out <- (anom > mv_mad * anom_mult)
+    if (!any(out, na.rm = TRUE)) {
+      break
+    }
   }
   return(outliers)
 }
-
-df <- d %>%
-  # filter(i > 6000, i < 9000) %>%
-  group_by(cast) %>%
-  mutate(outlier=hampel_q(n, k1=10, k2=40, tau=0.7, mult=5, n.max=3)) %>%
-  ungroup()
-
-diag_plots(df, "filter-hampel_like")
-
-
-

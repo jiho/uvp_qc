@@ -6,18 +6,17 @@
 #' @param k_anom order of the moving window for the deviation from quantile
 #' @param anom_mult multiplier of the anomaly to the quantile beyond which points are considered as outliers
 f <- function(x, k_tau=1, tau=0.75, k_anom=5, anom_mult=5.3) {
-  # remotes::install_github("jiho/castr")
-  library("castr")
+  library("slider")
 
   k_tau <- round(k_tau)
   k_anom <- round(k_anom)
 
   # run a moving quantile
-  mv_q <- slide(x, k=k_tau, stats::quantile, p=tau, na.rm=TRUE, n=1)
+  mv_q <- slide_dbl(x, .f=stats::quantile, p=tau, .before=k_tau, .after=k_tau)
 
   # run a moving absolute deviation from the quantile
   anom <- abs(x - mv_q)
-  mv_mad <- slide(anom, k=k_anom, stats::median, na.rm=TRUE)
+  mv_mad <- slide_dbl(anom, .f=stats::median, .before=k_anom, .after=k_anom)
 
   # detect as outliers all points that are beyond a constant * quantile deviation
   lim <- mv_q - (mv_mad * anom_mult)

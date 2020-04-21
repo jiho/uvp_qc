@@ -25,9 +25,11 @@ plot_diagnostics <- function(d, name, size=15) {
   png(file=paste0("test_plots/", name, "-1.png"), width=size, height=size*1.5, units="in", res=150)
   print(
     ggplot(d) + facet_wrap(~id, scale="free_x") +
-    geom_point(aes(n, -i, colour=outlier, size=outlier), shape=16, alpha=0.7) +
-    scale_colour_manual(values=c("black", "red")) + scale_size_manual(values=c(0.1, 0.5)) +
-    theme(legend.position="top")
+    geom_path(aes(lim, i), alpha=0.7, colour="dodgerblue", size=0.2) +
+    geom_point(aes(n, i, colour=n<lim, size=n<lim), shape=16, alpha=0.7) +
+    scale_colour_manual(values=c("black", "red")) + scale_size_manual(values=c(0.1, 0.3)) +
+    scale_y_reverse() +
+    theme(panel.grid=element_blank(), panel.background=element_rect(fill=NA, colour="grey80"), legend.position="top")
   )
   dev.off()
 
@@ -49,10 +51,7 @@ source(str_c("filter-", filter, ".R"))
 
 df <- d %>%
   group_by(id) %>%
-  mutate(outlier=hampel_q(n, k_tau=10,tau=0.7, k_anom=30, anom_mult=4, n_max=3)) %>%
+  mutate(lim=f(n, k_tau=10,tau=0.7, k_anom=30, anom_mult=4)) %>%
   ungroup()
 
 plot_diagnostics(df, filter)
-
-
-

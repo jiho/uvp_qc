@@ -32,7 +32,7 @@ plot_diagnostics <- function(d, name, size=15) {
     ggplot(d) + facet_wrap(~id, scale="free_x") +
     geom_path(aes(lim, i), alpha=0.7, colour="dodgerblue", size=0.2) +
     geom_point(aes(n, i, colour=n<lim, size=n<lim), shape=16, alpha=0.7) +
-    scale_colour_manual(values=c("black", "red")) + scale_size_manual(values=c(0.1, 0.3)) +
+    scale_colour_manual(values=c("black", "red"), guide="none") + scale_size_manual(values=c(0.1, 0.3), guide="none") +
     scale_y_reverse() +
     theme(panel.grid=element_blank(), panel.background=element_rect(fill=NA, colour="grey80"), legend.position="top")
   )

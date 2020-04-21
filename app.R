@@ -181,12 +181,24 @@ server <- function(input, output, session) {
   output$profile_plot <- renderPlot({
     message("start - plot selected data")
     d <- get_plot_data()
+
     # make transparency and size depend on the number of plotted points
     n_img <- diff(input$imgs)
     alpha <- size <- 0.9 - 0.75 * (n_img / (n_img + 500))
 
+    # compute proportion of images removed in this data
+    stats <- d %>%
+      group_by(profile) %>%
+      summarise(n_tot=n(), n_out=sum(n<thresh)) %>%
+      ungroup() %>%
+      # make that into a nice label
+      mutate(label=str_c(profile, " - ", n_out, "/", n_tot, " (", round(n_out/n_tot, 1)*100, "%)"))
+    # prepare a labelling function for the plot
+    stat_label <- function(df) {
+      list(profile=left_join(df, stats, by="profile")$label)
+    }
     out <- ggplot(d) +
-      facet_wrap(~profile, scales="free", ncol=4) +
+      facet_wrap(~profile, scales="free", ncol=4, labeller=stat_label) +
       # decision boundary
       geom_path(aes(x=thresh, y=i), colour="dodgerblue", size=0.25, alpha=0.6) +
       # points

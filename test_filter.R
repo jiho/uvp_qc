@@ -7,6 +7,11 @@ library("tidyverse")
 
 ## Prepare ----
 
+message("Prepare data")
+library("multidplyr")
+cl <- new_cluster(12)
+
+
 # read test data
 d <- read_csv("test_data.csv.gz", col_types=cols())
 
@@ -48,10 +53,16 @@ plot_diagnostics <- function(d, name, size=15) {
 filter <- "hampel_like"
 
 source(str_c("filter-", filter, ".R"))
+cluster_copy(cl, "f")
 
+message("Filter profiles") # in parallel
+system.time(
 df <- d %>%
-  group_by(id) %>%
+  group_by(id) %>% partition(cluster=cl) %>%
   mutate(lim=f(n, k_tau=10,tau=0.7, k_anom=30, anom_mult=4)) %>%
+  collect() %>%
   ungroup()
+)
 
+message("Plot")
 plot_diagnostics(df, filter)

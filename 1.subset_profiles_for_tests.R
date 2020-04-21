@@ -20,7 +20,9 @@ profiles_record <- map_dfr(proj_files, function(f) {
 })
 
 # now find the target profiles
-test_records <- filter(profiles_record, profiles %in% test_names)
+test_records <- filter(profiles_record, profiles %in% test_names) %>%
+  # still some duplicates because some profiles have the same name accross projects, remove them
+  filter(! proj %in% c("projs/uvp5_sn010_2014_m105.rds", "projs/uvp5_sn207_2018_exports_np_sr1812.rds", "projs/uvp5_sn009_2017_asgard.rds"))
 
 arrange(test_records, profiles) %>% mutate(dup=duplicated(profiles))
 

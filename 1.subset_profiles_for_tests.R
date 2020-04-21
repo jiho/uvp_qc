@@ -22,6 +22,8 @@ profiles_record <- map_dfr(proj_files, function(f) {
 # now find the target profiles
 test_records <- filter(profiles_record, profiles %in% test_names)
 
+arrange(test_records, profiles) %>% mutate(dup=duplicated(profiles))
+
 # and read them
 test <- test_records %>% group_by(proj) %>%
   do({

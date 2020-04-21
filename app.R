@@ -185,6 +185,7 @@ server <- function(input, output, session) {
     # make transparency and size depend on the number of plotted points
     n_img <- diff(input$imgs)
     alpha <- size <- 0.9 - 0.75 * (n_img / (n_img + 500))
+    size <- size*1.5
 
     # compute proportion of images removed in this data
     stats <- d %>%

@@ -200,7 +200,7 @@ server <- function(input, output, session) {
     out <- ggplot(d) +
       facet_wrap(~profile, scales="free", ncol=4, labeller=stat_label) +
       # decision boundary
-      geom_path(aes(x=thresh, y=i), colour="dodgerblue", size=0.25, alpha=0.6) +
+      geom_path(aes(x=thresh, y=i), colour="dodgerblue", size=0.25, alpha=0.2) +
       # points
       geom_point(aes(x=n, y=i, colour=n<thresh, alpha=n<thresh), size=size, shape=16) +
       scale_colour_manual(guide="none", values=c("black", "red")) +

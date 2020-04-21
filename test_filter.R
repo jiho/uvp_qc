@@ -52,6 +52,7 @@ plot_diagnostics <- function(d, name, size=15) {
 
 filter <- "hampel_like"
 filter <- "shifted_quantile"
+filter <- "dynamic_quantile"
 
 source(str_c("filter-", filter, ".R"))
 cluster_copy(cl, "f")
@@ -61,7 +62,8 @@ print(system.time(
 df <- d %>%
   group_by(id) %>% partition(cluster=cl) %>%
   # mutate(lim=f(n, k_tau=10,tau=0.7, k_anom=30, anom_mult=4)) %>%
-  mutate(lim=f(n, tau=0.75, k=12, mult=0.6)) %>%
+  # mutate(lim=f(n, tau=0.75, k=12, mult=0.6)) %>%
+  mutate(lim=f(n, tau=0.75, k=12, min_mult=0.55, max_mult=0.65, min_n=20, max_n=800)) %>%
   collect() %>%
   ungroup()
 ))

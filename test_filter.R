@@ -22,7 +22,7 @@ plot_diagnostics <- function(d, name, size=15) {
   dir.create("test_plots", showWarnings=F)
 
   # outlier plot
-  png(file=paste0("test_plots/", name, "-1.png"), width=size, height=size*1.5, units="in", res=150)
+  png(file=paste0("test_plots/", name, ".png"), width=size, height=size*1.5, units="in", res=150)
   print(
     ggplot(d) + facet_wrap(~id, scale="free_x") +
     geom_path(aes(lim, i), alpha=0.7, colour="dodgerblue", size=0.2) +
@@ -33,12 +33,12 @@ plot_diagnostics <- function(d, name, size=15) {
   )
   dev.off()
 
-  # before / after
-  before <- ggplot(d) + facet_wrap(~id, scale="free_x") + geom_point(aes(n, -i), shape=16, alpha=0.5, size=0.2)
-  after <- before %+% filter(d, !outlier)
-  png(file=paste0("test_plots/",name, "-2.png"), width=size*2, height=size, units="in", res=150)
-  print(before + after)
-  dev.off()
+  # # before / after
+  # before <- ggplot(d) + facet_wrap(~id, scale="free_x") + geom_point(aes(n, -i), shape=16, alpha=0.5, size=0.2)
+  # after <- before %+% filter(d, !outlier)
+  # png(file=paste0("test_plots/",name, "-ba.png"), width=size*2, height=size, units="in", res=150)
+  # print(before + after)
+  # dev.off()
 
   return(invisible(file))
 }

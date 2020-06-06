@@ -19,6 +19,8 @@ Some filters could also be implemented in python (and possibly MATLAB) and be us
 
 ## TODOs
 
+- [x] Select test data for various conditions
+- [x] Implement some filtering functions
 - [ ] Implement the `density_function`, `symmetric_anomaly`, `moving_k_means` filters in the same way as the others (i.e., as a function)
 - [ ] Make it easier to prototype filters in python and use them in `test_filter.R`
 - [ ] Improve the speed of the density-based filter
@@ -28,4 +30,4 @@ Some filters could also be implemented in python (and possibly MATLAB) and be us
 - [ ] Allow the user to flag a filtering are correct or incorrect in the visualisation app
 - [ ] Store the filtering parameters when a profile is flagged
 - [ ] Write the modified `_dat.txt` file when the filtering of a profile is flagged as good.
-
+- [ ] Match EcoTaxa images to be able to remove them

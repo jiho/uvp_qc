@@ -1,5 +1,5 @@
 #
-# Get UVP profiles on plankton
+# Get UVP profiles from the server plankton.obs-vlfr.fr
 #
 # (c) 2020 Jean-Olivier Irisson, GNU General Public License v3
 

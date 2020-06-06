@@ -24,6 +24,7 @@ Some filters could also be implemented in python (and possibly MATLAB) and be us
 - [ ] Improve the speed of the density-based filter
 - [ ] Find other, better filters?
 - [ ] Use an existing filtering function, rather than custom code, in the visualisation app
+- [ ] Simplify the user interface (number and meaning of the filtering parameters)
 - [ ] Allow the user to flag a filtering are correct or incorrect in the visualisation app
 - [ ] Store the filtering parameters when a profile is flagged
 - [ ] Write the modified `_dat.txt` file when the filtering of a profile is flagged as good.

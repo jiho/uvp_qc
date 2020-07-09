@@ -40,7 +40,7 @@ test <- test_records %>% group_by(proj) %>%
 test <- filter(test, i <= 5000)
 
 # reorder columns
-test <- select(test, id, i, press, n)
+test <- select(test, id, i, press, n:mean_grey_large)
 
 ggplot(test, aes(x=n, y=-i)) + facet_wrap(~id, scales="free_x") + geom_point(shape=".")
 

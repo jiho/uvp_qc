@@ -45,7 +45,7 @@ L <- parallel::mclapply(ids, function(i) {
         l <- lapply(1:nrow(m), function(j) {
           # message(j)
           d <- fread(m$datfile[j], sep=";", strip.white=TRUE) %>%
-            select(img=V1, press=V3, n=V15) %>%
+            select(img=V1, press=V3, n=V15, mean_area=V16, mean_grey=V17, n_large=V18, mean_grey_large=V19) %>%
             mutate(press=as.numeric(press)/10)
           # d <- vroom(m$datfile[j], col_names=F, delim=";", col_types=cols()) %>%
           #   select(img=X1, press=X3, n=X15)
